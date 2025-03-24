@@ -26,10 +26,13 @@ This project is a Test Case Management System built using **Spring Boot** and **
    - Robust exception handling with meaningful error messages.
 
 6. **Clean Code and Design Patterns**:
-   - Incorporates patterns like Service Layer, Factory, Builder, and Strategy.
+   - Incorporates patterns like Service Layer, Builder.
 
 7. **Extensibility**:
    - Highly modular and scalable architecture.
+     
+8. **Model Mapping**: Using `ModelMapper` for efficient DTO and entity mapping.
+
 
 ---
 
@@ -40,60 +43,11 @@ This project is a Test Case Management System built using **Spring Boot** and **
 - **ModelMapper**: For mapping DTOs and entities.
 - **Jakarta Validation**: For input validation.
 - **Lombok**: To reduce boilerplate code.
-- **H2 Database**: In-memory database for testing purposes.
+- **MongoDB Database**: database for Storing purposes.
 - **Maven**: Dependency management.
 
 ---
 
-## API Endpoints
-
-### 1. Test Case Endpoints
-
-#### a) Retrieve All Test Cases
-- **Endpoint**: `/api/testcases/all`
-- **Method**: GET
-- **Response**: List of all test cases.
-
-#### b) Retrieve Filtered Test Cases
-- **Endpoint**: `/api/testcases`
-- **Method**: GET
-- **Query Parameters**:
-  - `status` (optional): PENDING, IN_PROGRESS, PASSED, FAILED
-  - `priority` (optional): LOW, MEDIUM, HIGH
-  - Pagination params: `page`, `size`, `sort`.
-- **Response**: Paginated list of test cases.
-
-#### c) Retrieve Test Case by ID
-- **Endpoint**: `/api/testcases/{id}`
-- **Method**: GET
-- **Response**: Details of the test case with the given ID.
-
-#### d) Create a New Test Case
-- **Endpoint**: `/api/testcases`
-- **Method**: POST
-- **Request Body**:
-  ```json
-  {
-    "title": "Test Case Title",
-    "description": "Detailed Description",
-    "status": "PENDING",
-    "priority": "HIGH"
-  }
-  ```
-- **Response**: The created test case.
-
-#### e) Update an Existing Test Case
-- **Endpoint**: `/api/testcases/{id}`
-- **Method**: PUT
-- **Request Body**: Same as Create request body.
-- **Response**: The updated test case.
-
-#### f) Delete a Test Case
-- **Endpoint**: `/api/testcases/{id}`
-- **Method**: DELETE
-- **Response**: Success message.
-
----
 
 ## Installation and Setup
 
@@ -122,13 +76,151 @@ This project is a Test Case Management System built using **Spring Boot** and **
 
 ---
 
+## API Endpoints
+
+### 1. Test Case Endpoints
+
+#### a) Retrieve All Test Cases
+- **Endpoint**: `/api/testcases/all`
+- **Method**: GET
+- **Response**: List of all test cases.
+  **Response Example**:
+   ```json
+   [
+       {
+           "id": "1",
+           "title": "Test Case 1",
+           "description": "Description for test case 1",
+           "status": "PENDING",
+           "priority": "HIGH",
+           "createdAt": "2025-03-20T10:00:00",
+           "updatedAt": "2025-03-20T12:00:00"
+       }
+   ]
+   ```
+
+#### b) Retrieve Filtered Test Cases
+- **Endpoint**: `/api/testcases`
+- **Method**: GET
+- **Query Parameters**:
+  - `status` (optional): PENDING, IN_PROGRESS, PASSED, FAILED
+  - `priority` (optional): LOW, MEDIUM, HIGH
+  - Pagination params: `page`, `size`, `sort`.
+- **Response**: Paginated list of test cases.
+  
+  **Response Example**:
+   ```json
+   {
+       "content": [
+           {
+               "id": "1",
+               "title": "Test Case 1",
+               "description": "Description for test case 1",
+               "status": "PENDING",
+               "priority": "HIGH",
+               "createdAt": "2025-03-20T10:00:00",
+               "updatedAt": "2025-03-20T12:00:00"
+           }
+       ],
+       "pageable": { ... },
+       "totalElements": 1,
+       "totalPages": 1
+   }
+   ```
+
+#### c) Retrieve Test Case by ID
+- **Endpoint**: `/api/testcases/{id}`
+- **Method**: GET
+- **Response**: Details of the test case with the given ID.
+  **Response Example**:
+   ```json
+   {
+       "id": "1",
+       "title": "Test Case 1",
+       "description": "Description for test case 1",
+       "status": "PENDING",
+       "priority": "HIGH",
+       "createdAt": "2025-03-20T10:00:00",
+       "updatedAt": "2025-03-20T12:00:00"
+   }
+   ```
+
+#### d) Create a New Test Case
+- **Endpoint**: `/api/testcases`
+- **Method**: POST
+**Request Body**:
+   ```json
+   {
+       "title": "New Test Case",
+       "description": "Description for new test case",
+       "status": "IN_PROGRESS",
+       "priority": "MEDIUM"
+   }
+   ```
+
+   **Response Example**:
+   ```json
+   {
+       "id": "2",
+       "title": "New Test Case",
+       "description": "Description for new test case",
+       "status": "IN_PROGRESS",
+       "priority": "MEDIUM",
+       "createdAt": "2025-03-24T10:00:00",
+       "updatedAt": "2025-03-24T10:00:00"
+   }
+   ```
+
+#### e) Update an Existing Test Case
+- **Endpoint**: `/api/testcases/{id}`
+- **Method**: PUT
+- **Request Body**: Same as Create request body.
+- **Response**: The updated test case.
+
+ **Request Body**:
+   ```json
+   {
+       "title": "Updated Test Case",
+       "description": "Updated description",
+       "status": "PASSED",
+       "priority": "HIGH"
+   }
+   ```
+**Response Example**:
+   ```json
+   {
+       "id": "2",
+       "title": "Updated Test Case",
+       "description": "Updated description",
+       "status": "PASSED",
+       "priority": "HIGH",
+       "createdAt": "2025-03-24T10:00:00",
+       "updatedAt": "2025-03-24T12:00:00"
+   }
+   ```
+
+#### f) Delete a Test Case
+- **Endpoint**: `/api/testcases/{id}`
+- **Method**: DELETE
+- **Response**: Success message.
+
+**Response Example**:
+   ```json
+   {
+       "message": "TestCase Deleted Successfully"
+   }
+   ```
+---
+
+
+
 ## Database Schema
 
 ### TestCaseEntity
 
 | Field       | Type         | Description              |
 |-------------|--------------|--------------------------|
-| `id`        | Long         | Primary key.             |
+| `id`        | String         | Primary key.             |
 | `title`     | String       | Title of the test case.  |
 | `description` | String     | Test case description.   |
 | `status`    | Enum (Status)| Test case status.        |
