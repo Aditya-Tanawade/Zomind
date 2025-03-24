@@ -84,7 +84,7 @@ This project is a Test Case Management System built using **Spring Boot** and **
 - **Endpoint**: `/api/testcases/all`
 - **Method**: GET
 - **Response**: List of all test cases.
-- 
+  
   **Response Example**:
    ```json
    [
@@ -133,6 +133,7 @@ This project is a Test Case Management System built using **Spring Boot** and **
 - **Endpoint**: `/api/testcases/{id}`
 - **Method**: GET
 - **Response**: Details of the test case with the given ID.
+  
   **Response Example**:
    ```json
    {
@@ -187,6 +188,7 @@ This project is a Test Case Management System built using **Spring Boot** and **
        "priority": "HIGH"
    }
    ```
+
 **Response Example**:
    ```json
    {
